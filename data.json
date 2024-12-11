@@ -1200,8 +1200,18 @@
     "Comb",
     "Whetstone"
   ],
-
-  "npc_traits": [],
+  "npc_traits": {
+    "races": [],
+    "class": [
+      "wizard",
+      "warlock",
+      "paladin",
+      "rouge",
+      "fighter",
+      "barbarian",
+      "sorcerer"
+    ]
+  },
   "encounter_strat": [],
   "monsters": [],
   "wilderness_encounters": [],

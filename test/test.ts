@@ -2,7 +2,7 @@ import { assert, assertEquals } from "jsr:@std/assert";
 import { expect } from "jsr:@std/expect";
 import { delay } from "jsr:@std/async";
 
-import { rollDice } from "../lib/lib.ts";
+import { rollDice, roll } from "../lib/lib.ts";
 
 // roll dice
 Deno.test("Rolling some dice", () => {
@@ -19,7 +19,21 @@ Deno.test("Rolling some dice", () => {
     });
   } catch (err) {
     if (err instanceof Error) {
-      console.log("Test Error: ", err.message);
+      console.log("[Dice Roll] Test Error: ", err.message);
+    }
+  }
+});
+
+Deno.test("Rolling on the Tables", () => {
+  try {
+    for (let i = 1; i < 101; i++) {
+      const r = roll(i);
+      expect(r).toBeLessThanOrEqual(i);
+      expect(r).toBeGreaterThanOrEqual(1);
+    }
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log("[Roll] Test Error: ", err.message);
     }
   }
 });

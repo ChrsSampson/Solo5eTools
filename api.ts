@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 
 const api = new Hono().basePath("/api");
-import { rollDice } from "./lib/lib.ts";
+import { getOracle, rollDice } from "./lib/lib.ts";
 
 // rolls any of the standard dice and return the value - d4,d6,d8,d10,d12,d20,d100
 api.get("/roll/:dice", (c) => {
@@ -22,7 +22,20 @@ api.get("/roll/:dice", (c) => {
 // 13-18 Yes
 // 19-20 Yes, and
 
-api.get("/oracle", (c) => {});
+api.get("/oracle", (c) => {
+  try {
+    const r = rollDice(20);
+
+    const o = getOracle(r);
+
+    return c.json({ oracle: o });
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log(err);
+      return c.status(500);
+    }
+  }
+});
 
 api.get("/context", (c) => {
   return c.text("kewords");
