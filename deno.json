@@ -1,12 +1,20 @@
 {
   "imports": {
+    "@hono/swagger-ui": "npm:@hono/swagger-ui@^0.5.0",
     "hono": "jsr:@hono/hono@^4.6.13"
   },
   "tasks": {
-    "start": "deno run --allow-net main.ts"
+    "start": "deno run --allow-net main.ts",
+    "testWeb": "deno test ./test/webTests.ts --allow-read --allow-net"
   },
   "compilerOptions": {
     "jsx": "precompile",
     "jsxImportSource": "hono/jsx"
+  },
+  "lint": {
+    "rules": {
+      "include": [],
+      "exclude": ["no-explicit-any"]
+    }
   }
 }

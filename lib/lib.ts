@@ -5,10 +5,10 @@ interface JsonData {
   itmes: string[];
 }
 
-const data: JsonData = await loadData("../data.json");
+const data: JsonData = await loadData("./data.json");
 
 // load json data into memory
-async function loadData(path: string = "../data.json") {
+async function loadData(path: string = "../.../data.json") {
   try {
     if (path) {
       const file = await Deno.readTextFile(path);
@@ -17,7 +17,7 @@ async function loadData(path: string = "../data.json") {
       throw new Error("Something went wrong");
     }
   } catch (err) {
-    console.log("could not load json data: ", err);
+    console.log("Fatal: could not load json data: ", err);
     Deno.exit(1);
   }
 }
@@ -50,16 +50,16 @@ function roll(max: number = 100): number {
 }
 
 // oracle response table
-function getOracle(roll: number = 1): string {
-  if (roll <= 1 || roll <= 2) {
+function getOracleAnswer(roll: number = 1): string {
+  if (roll == 1 || roll == 2) {
     return "No, and...";
-  } else if (roll >= 3 || roll <= 7) {
+  } else if (roll >= 3 && roll <= 7) {
     return "No";
   } else if (roll == 10) {
     return "Maybe [Skill Check]";
-  } else if (roll >= 11 || roll <= 12) {
+  } else if (roll == 11 || roll == 12) {
     return "Yes, but...";
-  } else if (roll >= 13 || roll <= 18) {
+  } else if (roll >= 13 && roll <= 18) {
     return "Yes";
   } else if (roll == 19 || roll == 20) {
     return "Yes, and...";
@@ -67,26 +67,66 @@ function getOracle(roll: number = 1): string {
 
   return "No, and...";
 }
-// return 3-5 words from keywords table
+
+//return 3-5 words from keywords table
 function getOracleContext(words: number = 3): string[] {
   try {
-    const max = data["keywords"].legnth;
+    if (words > 5) words = 5;
+    const max = data["keywords"].length;
 
-    return [""];
+    const out = [];
+
+    for (let i = 0; i < words; i++) {
+      const r = roll(max);
+
+      out.push(data["keywords"][r]);
+    }
+
+    return out;
   } catch (err) {
     console.log(err);
-    return [""];
+    return [String(err)];
   }
 }
 
-function getTable(key: string): string[] {
-  const keys = ["items", "keywords"];
+// ----------The D12 System tables and rolls ---------------------
 
-  if (keys.includes(key)) {
-    return data[key];
-  } else {
-    return [""];
-  }
+// Roll the 6D12 tables for a desciption of the surroundings
+// This function will likely get complicated with all the rolls that trigger other rolls.
+function getDMDescription(type: string) {
+  const types = [
+    "wilderness",
+    "room",
+    "passage",
+    "special room",
+    "special wilderness",
+  ];
+
+  // PG - 22
+  const result = {
+    monsters: rollDice(12),
+    clues: rollDice(12),
+    npc: rollDice(12),
+    event: rollDice(12),
+    treasure: rollDice(12),
+    enviroment: rollDice(12),
+  };
+
+  return result;
 }
 
-export { rollDice, roll, getOracle, data };
+// PG - 27
+function getDungeonFeature() {}
+
+// PG - 25
+function getWildernessFeature() {}
+
+function getTrap() {}
+
+function getWildernessEncouter() {}
+
+function getUrbanEncounter() {}
+
+function getUrbanSetting() {}
+
+export { rollDice, roll, getOracleAnswer, data, loadData, getOracleContext };
