@@ -1,21 +1,13 @@
 const template = document.createElement("template");
 template.id = "Oracle-Component";
 template.innerHTML = `
-    <section>
+<link rel="stylesheet" href="/static/css/oracle.css">
+    <section class="container">
         <div>
-        <h2>Oracle</h2>
-        <div class="options">
-            <div class="input-group">
-                <label>Roll with Context</label>
-                <input type="checkbox" />
-            </div>
-            <div class="input-group">
-                <label>Context Length</label>
-                <input id="context-slider" type="range" value=3 step=1 min=3 max=5 />
-                <span id="context-length-display">3 words</span>
-            </div>
+            <h2>Oracle</h2>
+            <p>Propse a question (yes or no) to the oracle. Context keywords are up to your interpretation.</p>
         </div>
-        </di>
+        <section class="grid">
         <div>
             <div class="result-display">
             <h3>Response</h3>
@@ -25,59 +17,91 @@ template.innerHTML = `
                 <div id="context"></div>
                 </div>
             </div>
-            <button id="roll">Roll</button>
+            <div class="bottom-bar">
+                <button class="main-btn" id="roll">Roll</button>
+                <div class="input-group">
+                    <label>Context Length</label>
+                    <input id="context-slider" type="range" value=3 step=1 min=3 max=5 />
+                    <span id="context-length-display">3 words</span>
+                </div>
+            </div>
+        </div>
         <div>
-        
+            <h3>Likelihood Modifiers</h3>
+            <p>Given the circumstances, how likely is it that the answer will be yes?</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Likelihood
+                        </th>
+                        <th>
+                            Modifier
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            Impossible
+                        </td>
+                        <td>
+                            -8
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Highly Unlikley
+                        </td>
+                        <td>
+                            -5
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Unlikeley
+                        </td>
+                        <td>
+                            -3
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Possible
+                        </td>
+                        <td>
+                            0
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Likley
+                        </td>
+                        <td>
+                            +3
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Highly Likley
+                        </td>
+                        <td>
+                            +5
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            A Certainty
+                        </td>
+                        <td>
+                            +8
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </section>
     </section>
-    <style>
-        section{
-            border:1px solid;
-            border-radius: .5em;
-            padding:1em;
-        }
-        .input-group{
-            display:flex;
-            gap:.5em;
-            align-items:center;
-        }
-        .options{
-            border-radius:.5em;
-            padding:.5em;
-            backdrop-filter: brightness(80%);
-            margin:0 0 0.25em 0 ;
-        }
-        .context-slider{
-            background: #2A4E6C;
-            --webkit-appearance:none;
-        }
-        .result-display{
-        border-radius:.5em;
-            padding:.5em;
-            backdrop-filter: brightness(80%);
-        }
-        .content-slider::-moz-range-track{
-            background: #2A4E6C
-        }
-        .roll-display{
-            border-radius:.5em;
-            padding:.5em;
-            backdrop-filter: brightness(80%);
-        }
-        label{
-            font-face:bold;
-        }
-        button{
-            background-color:#2A4E6C;
-            border:2px solid;
-            border-color: #2A4E6C;
-            border-radius: .5em;
-            padding: .5em 2em;
-        }
-        #context{
-            display:flex;
-            gap:1em;
-        }
-    </style>
 `;
 
 // Create a class for the element
@@ -100,18 +124,17 @@ class Oracle extends HTMLElement {
         this.roll = null;
         this.context = [""];
         this.contextLength = 3;
+        this.modifier = 0;
     }
 
     async getOracleAwnser() {
         try {
-            const r = await fetch("/api/oracle");
+            const r = await fetch(`/api/oracle?ctxl=${this.contextLength}`);
 
             const { data } = await r.json();
 
             this.setRoll(data.oracleAwnser);
             this.setContext(data.context);
-
-            console.log(data);
         } catch (err) {
             console.log(err);
         }
@@ -152,18 +175,18 @@ class Oracle extends HTMLElement {
         });
     }
 
-    // called on remove
-    disconnectedCallback() {
-        console.log("Custom element removed from page.");
-    }
+    // // called on remove
+    // disconnectedCallback() {
+    //     console.log("Custom element removed from page.");
+    // }
 
-    adoptedCallback() {
-        console.log("Custom element moved to new page.");
-    }
+    // adoptedCallback() {
+    //     console.log("Custom element moved to new page.");
+    // }
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        console.log(`Attribute ${name} has changed.`);
-    }
+    // attributeChangedCallback(name, oldValue, newValue) {
+    //     console.log(`Attribute ${name} has changed.`);
+    // }
 }
 
 customElements.define("oracle-component", Oracle);

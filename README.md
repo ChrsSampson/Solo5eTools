@@ -7,8 +7,22 @@ This app requires very little server side overhead, most requests are likely to 
 
 99% of requests at the time of writing this are going to be GET.
 
-Start in Dev
+Start server in Dev
 
 ```bash
 Deno run -A --watch ./main.ts
+```
+
+Start vite dev server
+
+```bash
+cd ./client
+Deno task dev
+```
+
+Build client for prod
+
+```bash
+cd ./client
+Deno task build
 ```

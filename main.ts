@@ -14,12 +14,28 @@ if (env.mode == "dev") {
     console.log("Megan is spying...");
 
     app.use("*", async (c, next) => {
-        console.log(`Request:${c.req.method}:`, c.req.path);
-        if (c.req.header("content-type") == "application/json") {
-            console.log(`Incoming Body:`, await c.req.json());
-        }
+        try {
+            console.log(
+                `Request:${c.req.method}:`,
+                c.req.path + "?" + JSON.stringify({ ...c.req.query() })
+            );
 
-        return next();
+            const params = c.req.param();
+
+            if (Object.keys(params).length > 1) {
+                console.log("URL Params", params);
+            }
+
+            if (c.req.header("content-type") == "application/json") {
+                console.log(`Incoming Body:`, await c.req.json());
+            }
+
+            return next();
+        } catch (err) {
+            console.log("Megan does not understand...", err);
+
+            return next();
+        }
     });
 }
 
