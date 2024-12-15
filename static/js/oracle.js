@@ -3,12 +3,13 @@ template.id = "Oracle-Component";
 template.innerHTML = `
 <link rel="stylesheet" href="/static/css/oracle.css">
     <section class="container">
-        <div>
-            <h2>Oracle</h2>
-            <p>Propse a question (yes or no) to the oracle. Context keywords are up to your interpretation.</p>
-        </div>
+        
         <section class="grid">
         <div>
+            <div>
+            <h2>The Oracle</h2>
+            <p>Propse a question (yes or no) to the oracle. Context keywords are up to your interpretation.</p>
+        </div>
             <div class="result-display">
             <h3>Response</h3>
                 <h3 class="roll-display" id="roll-display"></h3>
@@ -27,7 +28,7 @@ template.innerHTML = `
             </div>
         </div>
         <div>
-            <h3>Likelihood Modifiers</h3>
+            <h2>Likelihood Modifiers</h2>
             <p>Given the circumstances, how likely is it that the answer will be yes?</p>
             <table>
                 <thead>
@@ -37,6 +38,8 @@ template.innerHTML = `
                         </th>
                         <th>
                             Modifier
+                        </th>
+                        <th>
                         </th>
                     </tr>
                 </thead>
@@ -48,6 +51,9 @@ template.innerHTML = `
                         <td>
                             -8
                         </td>
+                        <td>
+                            <input type="radio" value="-8" name="modifier" />
+                        </rd>
                     </tr>
                     <tr>
                         <td>
@@ -56,6 +62,9 @@ template.innerHTML = `
                         <td>
                             -5
                         </td>
+                        <td>
+                            <input type="radio" value="-5" name="modifier" />
+                        </rd>
                     </tr>
                     <tr>
                         <td>
@@ -64,6 +73,9 @@ template.innerHTML = `
                         <td>
                             -3
                         </td>
+                        <td>
+                            <input type="radio" value="-3" name="modifier" />
+                        </rd>
                     </tr>
                     <tr>
                         <td>
@@ -72,6 +84,9 @@ template.innerHTML = `
                         <td>
                             0
                         </td>
+                        <td>
+                            <input type="radio" value="0" name="modifier" checked="true" />
+                        </rd>
                     </tr>
                     <tr>
                         <td>
@@ -80,6 +95,9 @@ template.innerHTML = `
                         <td>
                             +3
                         </td>
+                        <td>
+                            <input type="radio" value="3" name="modifier" />
+                        </rd>
                     </tr>
                     <tr>
                         <td>
@@ -88,6 +106,9 @@ template.innerHTML = `
                         <td>
                             +5
                         </td>
+                        <td>
+                            <input type="radio" value="5" name="modifier" />
+                        </rd>
                     </tr>
                     <tr>
                         <td>
@@ -96,6 +117,9 @@ template.innerHTML = `
                         <td>
                             +8
                         </td>
+                        <td>
+                            <input type="radio" value="8" name="modifier" />
+                        </rd>
                     </tr>
                 </tbody>
             </table>
@@ -120,6 +144,7 @@ class Oracle extends HTMLElement {
         this.contextDisplay = this.shadow.querySelector("#context");
         this.contextSlider = this.shadow.querySelector("#context-slider");
         this.contextLengthDisplay = this.shadow.querySelector("#context-length-display");
+        this.radioButtons = this.shadow.querySelectorAll("input[type='radio']");
 
         this.roll = null;
         this.context = [""];
@@ -129,7 +154,7 @@ class Oracle extends HTMLElement {
 
     async getOracleAwnser() {
         try {
-            const r = await fetch(`/api/oracle?ctxl=${this.contextLength}`);
+            const r = await fetch(`/api/oracle?ctxl=${this.contextLength}&mod=${this.modifier}`);
 
             const { data } = await r.json();
 
@@ -162,6 +187,10 @@ class Oracle extends HTMLElement {
         this.contextLengthDisplay.innerHTML = `${value} words`;
     }
 
+    setModifier(value) {
+        this.modifier = Number(value);
+    }
+
     //------------------ On Mount ------------------
     connectedCallback() {
         if (this.button) {
@@ -172,6 +201,12 @@ class Oracle extends HTMLElement {
 
         this.contextSlider.addEventListener("change", (e) => {
             this.setContextLength(e.target.value);
+        });
+
+        this.radioButtons.forEach((btn) => {
+            btn.addEventListener("change", (e) => {
+                this.setModifier(e.target.value);
+            });
         });
     }
 

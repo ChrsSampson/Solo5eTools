@@ -30,17 +30,11 @@ api.get("/oracle", async (c) => {
     const contextMap = [1, 2, 8, 9, 11, 12, 19, 20];
     try {
         const query = await c.req.query();
-
-        const modifier = query.modifier;
-
+        const modifier = Number(query.mod);
         const r = rollDice(20);
-
-        const result = r + modifier;
-
+        const result = r + Number(modifier);
         const o = getOracleAnswer(result);
-
         let words = ["No Context"];
-
         // if the roll  is 1-2-8-9-11-12-19-20 - get context
         if (contextMap.includes(r)) {
             const query = await c.req.query();
