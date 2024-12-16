@@ -1,0 +1,72 @@
+.item-generator {
+    border: 1px solid;
+    border-radius: 0.5em;
+    padding: 1em;
+}
+
+@media (prefers-color-scheme: light) {
+    .item-generator {
+        backdrop-filter: brightness(95%);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .item-generator {
+        backdrop-filter: brightness(65%);
+    }
+}
+
+#roll-btn {
+    color: #c7c7c7;
+    background-color: #2a4e6c;
+    border: 2px solid;
+    border-color: #2a4e6c;
+    border-radius: 0.5em;
+    padding: 1em 3em;
+    font-size: 16px;
+}
+#roll-btn:hover {
+    background-color: #1e374d;
+    border-color: #1e374d;
+}
+
+.flex-row {
+    display: flex;
+    gap: 1em;
+}
+
+label {
+    font-size: 1.5em;
+}
+
+/* -----------------Table Styles----------------- */
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+}
+th {
+    background-color: #2a4e6c;
+    color: #c7c7c7;
+}
+th,
+td {
+    padding: 10px;
+    border: 1px solid;
+    font-size: 1.2em;
+}
+
+/* required css to make rounded table (below) */
+tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}

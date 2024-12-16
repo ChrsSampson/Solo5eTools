@@ -5,6 +5,9 @@ Tools, Tables, and generators for solo adventuring. All data is static and prelo
 Architecture: Monolith
 This app requires very little server side overhead, most requests are likely to just be for serving static files.
 
+Backend: Hono + Deno
+Frontend: JS Web Components
+
 99% of requests at the time of writing this are going to be GET.
 
 Start server in Dev
