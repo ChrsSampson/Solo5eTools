@@ -2,8 +2,16 @@
 
 interface JsonData {
     keywords: string[];
-    itmes: string[];
+    items: string[];
+    magic_titles: [{ title: string; effect: string }];
+    npc_traits: NPC_Traits;
 }
+
+type NPC_Traits = {
+    races: string[];
+    class: "wizard" | "warlock" | "paladin" | "rouge" | "fighter" | "barbarian" | "sorcerer";
+    mood: string;
+};
 
 const data: JsonData = await loadData("./data.json");
 
@@ -21,6 +29,8 @@ async function loadData(path: string = "../.../data.json") {
         Deno.exit(1);
     }
 }
+
+// --------------Dicer Rollers and Random Numbers------------------
 
 // roll any of the standard dice
 function rollDice(dice: number = 20): number {
@@ -48,6 +58,8 @@ function roll(max: number = 100): number {
 
     return n;
 }
+
+// -------------Oracle Functions-------------------
 
 // oracle response table
 function getOracleAnswer(roll: number = 1): string {
@@ -89,6 +101,68 @@ function getOracleContext(words: number = 3): string[] {
     }
 }
 
+//----------------- item generators ------------------------
+
+// item return spec JSON - {name:string, title?: string, effect?: string, value:number, price?: number}
+
+type ItemOut = {
+    name: string;
+    title?: string;
+    effect?: string;
+    value: number;
+    price?: number;
+    currency: "cp" | "sp" | "gp" | "";
+};
+
+// gets item from table
+function getItem(): ItemOut {
+    try {
+        const max_items: number = data.items.length;
+        const r: number = roll(max_items);
+        const name: string = data.items[r];
+
+        const item_value = roll(10);
+
+        const out: ItemOut = {
+            name: name,
+            title: "None",
+            value: item_value,
+            currency: item_value >= 5 ? "cp" : "sp",
+            price: item_value * 3 + roll(9),
+        };
+
+        return out;
+    } catch (err) {
+        console.log(err);
+        return { name: "Nothing", value: 0, price: 0, currency: "" };
+    }
+}
+
+// get an item and add a magic title to it
+function getMagicItem() {
+    try {
+        const item = getItem();
+
+        const max_title = data["magic_titles"].length;
+
+        const { title, effect } = data["magic_titles"][roll(max_title)];
+
+        const out: ItemOut = {
+            name: item.name,
+            title,
+            effect,
+            value: item.value + 100,
+            currency: "gp",
+            price: (item.value + roll(9)) * 3 + roll(200),
+        };
+
+        return out;
+    } catch (err) {
+        console.log(err);
+        return { name: "Nothing", value: 0, price: 0, currency: "" };
+    }
+}
+
 // ----------The D12 System tables and rolls ---------------------
 
 // Roll the 6D12 tables for a desciption of the surroundings
@@ -123,4 +197,4 @@ function getUrbanEncounter() {}
 
 function getUrbanSetting() {}
 
-export { rollDice, roll, getOracleAnswer, data, loadData, getOracleContext };
+export { rollDice, roll, getOracleAnswer, data, loadData, getOracleContext, getItem, getMagicItem };

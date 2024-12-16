@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 
 const api = new Hono().basePath("/api");
-import { getOracleAnswer, rollDice, getOracleContext } from "./lib/lib.ts";
+import { getOracleAnswer, rollDice, getOracleContext, getItem, getMagicItem } from "./lib/lib.ts";
 
 // rolls any of the standard dice and return the value - d4,d6,d8,d10,d12,d20,d100
 api.get("/roll/:dice", (c) => {
@@ -68,7 +68,23 @@ api.get("/context", async (c) => {
 });
 
 // roll on the items table - return an item
-api.get("/item/discover", (c) => {});
+// should be able to return an object
+// Request Query:
+// is Magic item - mgc
+api.get("/item/discover", async (c) => {
+    try {
+        const query = await c.req.query();
+
+        if (query["mgc"]) {
+            return c.json(getMagicItem());
+        } else {
+            return c.json(getItem());
+        }
+    } catch (err) {
+        console.log(err);
+        return c.status(500);
+    }
+});
 
 // roll on the item table - return an item and a buy and sell price;
 api.get("/item/buy", (c) => {});

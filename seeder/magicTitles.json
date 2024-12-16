@@ -1,0 +1,84 @@
+[
+    [
+        {
+            "title": "of Flight",
+            "effect": "Allows the user to fly 60ft for 1 hour per day."
+        },
+        {
+            "title": "of Fire Resistance",
+            "effect": "Grants resistance to fire damage."
+        },
+        {
+            "title": "of Water Breathing",
+            "effect": "Allows the user to breathe underwater."
+        },
+        {
+            "title": "of Strength",
+            "effect": "Increases the user's Strength score by 2, up to a maximum of 20."
+        },
+        {
+            "title": "of Invisibility",
+            "effect": "Allows the user to cast Invisibility once per long rest."
+        },
+        {
+            "title": "of Healing",
+            "effect": "Heals 1d8 hit points as a bonus action, usable three times per long rest."
+        },
+        {
+            "title": "of Darkvision",
+            "effect": "Grants the user Darkvision out to a range of 60ft."
+        },
+        {
+            "title": "of Teleportation",
+            "effect": "Allows the user to cast Misty Step once per short rest."
+        },
+        {
+            "title": "of Shielding",
+            "effect": "Grants the user a +2 bonus to AC while not wearing heavy armor."
+        },
+        {
+            "title": "of Lightning",
+            "effect": "Allows the user to cast Lightning Bolt (3rd level) once per long rest."
+        },
+        {
+            "title": "of Climbing",
+            "effect": "Grants a climbing speed equal to the user's walking speed."
+        },
+        {
+            "title": "of Spell Storing",
+            "effect": "Allows the item to store one spell of up to 3rd level, castable once per long rest."
+        },
+        {
+            "title": "of Feather Falling",
+            "effect": "Automatically casts Feather Fall if the user falls more than 10ft."
+        },
+        {
+            "title": "of Animal Friendship",
+            "effect": "Allows the user to cast Animal Friendship at will."
+        },
+        {
+            "title": "of Evasion",
+            "effect": "Grants the user advantage on Dexterity saving throws against effects that deal damage."
+        },
+        {
+            "title": "of Fireball",
+            "effect": "Allows the user to cast Fireball (3rd level) once per long rest."
+        },
+        {
+            "title": "of Regeneration",
+            "effect": "Heals 1 hit point at the start of the user's turn if they have at least 1 hit point."
+        },
+        {
+            "title": "of Detection",
+            "effect": "Allows the user to cast Detect Magic or Detect Evil and Good at will."
+        },
+        {
+            "title": "of Stoneskin",
+            "effect": "Allows the user to cast Stoneskin once per long rest."
+        },
+        {
+            "title": "of Alertness",
+            "effect": "Grants the user a +5 bonus to initiative."
+        }
+    ]
+]
