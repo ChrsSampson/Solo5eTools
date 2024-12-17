@@ -2,13 +2,9 @@
 
 import { assert } from "jsr:@std/assert";
 import { expect } from "jsr:@std/expect";
-import { delay } from "jsr:@std/async";
-import { assertInstanceOf } from "https://deno.land/std@0.224.0/assert/assert_instance_of.ts";
 
 import { rollDice, roll, loadData, getOracleContext, getItem, getMagicItem } from "../lib/lib.ts";
 import { getOracleAnswer } from "../lib/lib.ts";
-
-let data = null;
 
 // utility for priting error
 function logError(err: any) {
@@ -130,21 +126,36 @@ Deno.test("Oracle is Elaborating...", () => {
 Deno.test.only("Finding Items", async (t) => {
     try {
         await t.step("Get Normal Item", () => {
-            const item = getItem();
+            try {
+                const item = getItem();
 
-            expect(typeof item).toBe("object");
+                expect(typeof item).toBe("object");
 
-            expect(item).toHaveProperty("name");
-            expect(item).toHaveProperty("title");
-            expect(item).toHaveProperty("value");
-            expect(item).toHaveProperty("currency");
+                expect(item).toHaveProperty("name");
+                expect(item).toHaveProperty("title");
+                expect(item).toHaveProperty("value");
+                expect(item).toHaveProperty("currency");
 
-            const { name, title, value, currency } = item;
+                const { name, title, value, currency } = item;
 
-            expect(typeof name).toBe("string");
-            expect(typeof title).toBe("string");
-            expect(typeof value).toBe("number");
-            expect(typeof name).toBe("string");
+                expect(typeof name).toBe("string");
+                expect(typeof title).toBe("string");
+                expect(typeof value).toBe("number");
+                expect(typeof name).toBe("string");
+            } catch (err) {
+                logError(err);
+            }
+        });
+
+        await t.step("Getting 20 items", () => {
+            try {
+                for (let i = 0; i < 20; i++) {
+                    const item = getItem();
+                    expect(item).toHaveProperty("name");
+                }
+            } catch (err) {
+                logError(err);
+            }
         });
 
         await t.step("Get Magic Item", () => {

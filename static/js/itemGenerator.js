@@ -4,11 +4,12 @@ ItemGeneratorTemplate.innerHTML = `
     <section class="item-generator">
         <link rel="stylesheet" href="/static/css/itemGenerator.css">
         <h2>Item Generator</h2>
+        <p>Generator a random item found in the enviroment.</p>
         <div class="flex-row">
         <div>
             <div className="input-group">
-                <label for="html-check">Magic Item?</label>
-                <input id="magic-toggle" type="checkbox" name="magic-check" />
+                <label for="magic-toggle">Magic Item?</label>
+                <input id="magic-toggle" type="checkbox" />
             </div>
             <button id="roll-btn">Roll</button>
         </div>
@@ -46,7 +47,7 @@ class ItemGenerator extends HTMLElement {
         }
     }
 
-    createDisplayTable() {
+    createItemDisplayTable() {
         try {
             this.itemDisplay.innerHTML = "";
             const table = document.createElement("table");
@@ -61,25 +62,29 @@ class ItemGenerator extends HTMLElement {
                 `;
             });
 
-            const innerTable = () => {
-                return `
-            <thead>
-                <tr>
-                    <th>
-                        Item
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                ${values}
-            </tbody>
+            const head = document.createElement("thead");
+            head.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>
+                            Item
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                    </tr>
+                </thead>
             `;
-            };
 
-            table.innerHTML = innerTable();
+            const body = document.createElement("tbody");
+            values.forEach((v) => {
+                const el = document.createElement("tr");
+                el.innerHTML = v;
+                body.appendChild(el);
+            });
+
+            table.appendChild(head);
+            table.appendChild(body);
 
             this.itemDisplay.appendChild(table);
         } catch (err) {
@@ -89,24 +94,27 @@ class ItemGenerator extends HTMLElement {
 
     // ----------------Setters------------------
     setMagic(value) {
-        this.is_magic = value;
-        this.magicToggle.checked = value;
+        if (this.is_magic) {
+            this.is_magic = false;
+            this.magicToggle.checked = false;
+        } else {
+            this.is_magic = value;
+            this.magicToggle.checked = value;
+        }
     }
 
     setItem(value) {
         this.item = value;
-        this.createDisplayTable();
+        this.createItemDisplayTable();
     }
 
     // on Mount
     connectedCallback() {
-        console.log("Item generator");
-
         this.magicToggle.addEventListener("change", (e) => {
             this.setMagic(e.target.value);
         });
 
-        this.rollbtn.addEventListener("click", (e) => {
+        this.rollbtn.addEventListener("click", () => {
             this.getItem();
         });
     }

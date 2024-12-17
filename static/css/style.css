@@ -32,6 +32,14 @@ main {
     color-scheme: light;
 }
 
+/* --------------Layout Containers----------------- */
+
+.flex-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
 /* -----------------Table Styles----------------- */
 
 table {
